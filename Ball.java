@@ -44,6 +44,10 @@ public class Ball implements Block
 	*/
 	public int checkCollission(){
 		double angle = 0;
+		// Collission check with the walls
+		if((yPos<=0 && yVelocity<0) || (yPos+Ball.HEIGHT>=Runner.YDIMENSION && yVelocity>0))
+			yVelocity *= -1;
+		
 		// Collission check with paddles
 		if(xPos<=leftPaddle.xPos+Paddle.WIDTH && yPos>=leftPaddle.yPos && yPos<=leftPaddle.yPos+Paddle.HEIGHT) // left
 			angle = (Math.random()*2*Math.PI) - (Math.PI/2);
@@ -53,7 +57,6 @@ public class Ball implements Block
 			return -1;
 		else if(xPos+Ball.WIDTH>=Runner.XDIMENSION) // hits right edge
 			return 1;
-		
 		xVelocity = (int)(Math.cos(angle)*Ball.SPEED);
 		yVelocity = (int)(Math.sin(angle)*Ball.SPEED);
 		return 0;
