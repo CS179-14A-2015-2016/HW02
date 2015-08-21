@@ -8,11 +8,11 @@ import java.awt.*;
 public class Ball implements Block
 {
 	// Euclidian speed of the ball. STUB value. Change to correct.
-	private final static int SPEED = 10;
+	private final static int SPEED = 20;
 	
 	// Dimensions of the ball
-	private final static int WIDTH = 10;
-	private final static int HEIGHT = 10;
+	private final static int WIDTH = 20;
+	private final static int HEIGHT = 20;
 	
 	// The two paddles in the game. Needed for collision checking
 	Paddle leftPaddle, rightPaddle;
@@ -20,6 +20,10 @@ public class Ball implements Block
 	// speed of ball in terms of displacement in X and Y; xy position of the ball
 	double xVelocity, yVelocity;
 	int xPos, yPos;
+	long startWait;
+	long lastRecord;
+	
+	boolean touched;
 	
 	/*
 	* Constructor of the ball object. Keeps track of the left and right paddle
@@ -33,8 +37,12 @@ public class Ball implements Block
 		rightPaddle = right;
 		xPos = Runner.XDIMENSION/2;
 		yPos = Runner.YDIMENSION/2;
-		xVelocity = 10;
+		xVelocity = Ball.SPEED;
 		yVelocity = 0;
+		
+		startWait = 1000000000l;
+		lastRecord = System.nanoTime();
+		touched = false;
 	}
 	
 	/*
@@ -43,23 +51,50 @@ public class Ball implements Block
 	* Returns 1 if the ball touches the right edge, and -1 if the ball touches the left edge
 	*/
 	public int checkCollission(){
-		double angle = 0;
+		double angle = -1;
 		// Collission check with the walls
 		if((yPos<=0 && yVelocity<0) || (yPos+Ball.HEIGHT>=Runner.YDIMENSION && yVelocity>0))
 			yVelocity *= -1;
 		
 		// Collission check with paddles
-		if(xPos<=leftPaddle.xPos+Paddle.WIDTH && yPos>=leftPaddle.yPos && yPos<=leftPaddle.yPos+Paddle.HEIGHT) // left
-			angle = (Math.random()*2*Math.PI) - (Math.PI/2);
-		else if(xPos+Ball.WIDTH>=rightPaddle.xPos && yPos>=rightPaddle.yPos && yPos<=leftPaddle.yPos+Paddle.HEIGHT)
-			angle = (Math.random()*2*Math.PI) + (Math.PI/2);
-		else if(xPos<=0) // hits left edge
+		if(!touched && xPos<=leftPaddle.xPos+Paddle.WIDTH && xPos+Ball.WIDTH>=leftPaddle.xPos && yPos+Ball.HEIGHT>=leftPaddle.yPos && yPos<=leftPaddle.yPos+Paddle.HEIGHT) // left
+		{
+			angle = (Math.random()*Math.PI/2) - (Math.PI/4);
+			touched = true;
+		}
+		else if(!touched && xPos+Ball.WIDTH>=rightPaddle.xPos  && xPos+Ball.WIDTH<=rightPaddle.xPos+Paddle.WIDTH && yPos+Ball.HEIGHT>=rightPaddle.yPos && yPos<=rightPaddle.yPos+Paddle.HEIGHT)
+		{
+			angle = (Math.random()*Math.PI/2) + (Math.PI*3.0/4);
+			touched = true;
+		}
+		else
+			touched = false;
+		
+		if(xPos<=0) // hits left edge
 			return -1;
 		else if(xPos+Ball.WIDTH>=Runner.XDIMENSION) // hits right edge
 			return 1;
+			
+		if(angle==-1)
+			return 0;
+		
 		xVelocity = (int)(Math.cos(angle)*Ball.SPEED);
 		yVelocity = (int)(Math.sin(angle)*Ball.SPEED);
 		return 0;
+	}
+	
+	public void reset(int winner)
+	{
+		xPos = Runner.XDIMENSION/2;
+		yPos = Runner.YDIMENSION/2;
+		yVelocity = 0;
+		if(winner==Paddle.LEFT)
+			xVelocity = Ball.SPEED;
+		else
+			xVelocity = -1*Ball.SPEED;
+		
+		lastRecord = System.nanoTime();
+		startWait = 500000000l;
 	}
 	
 	/*
@@ -67,6 +102,13 @@ public class Ball implements Block
 	* Computes the x and y displacement according to angle and speed.
 	*/
 	public void run(){
+		if(startWait>0){
+			long prev = lastRecord;
+			lastRecord = System.nanoTime();
+			long actualTime = lastRecord-prev;
+			startWait -= actualTime;
+			return;
+		}
 		xPos += xVelocity;
 		yPos += yVelocity;
 	}
@@ -78,7 +120,7 @@ public class Ball implements Block
 	* Graphics g - the Graphics parameter passed down by the paint() function of the Canvas
 	*/
 	public void draw(Graphics g) {
-		g.setColor(Color.GREEN);
+		g.setColor(Color.ORANGE);
 		g.fillOval(xPos, yPos, Ball.WIDTH, Ball.HEIGHT);
 	}
 }

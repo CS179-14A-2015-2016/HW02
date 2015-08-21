@@ -25,8 +25,8 @@ public class Paddle implements Block
 	// SPEED is the speed of the paddle.
 	// DEVELOPERS FIX THIS AS NECESSARY. THE VALUES ARE JUST STUBS.
 	private static final int LX = 25;
-	private static final int RX = 275; 
-	private static final int Y = 150;
+	private static final int RX = Runner.XDIMENSION-WIDTH-25; 
+	private static final int Y = Runner.YDIMENSION/2-(HEIGHT/2);
 	private static final int SPEED = 10;
 	
 	// player tells which side this paddle is; state tells if the paddle is climbing, falling, or staying in place.
@@ -34,7 +34,7 @@ public class Paddle implements Block
 	
 	// x-y coordinates of the paddle on the canvas
 	int xPos, yPos;
-	
+	int score;
 	/*
 	* Constructor for Paddle object.
 	* 
@@ -50,6 +50,7 @@ public class Paddle implements Block
 		
 		state = Paddle.STAY;
 		yPos = Y;
+		score = 0;
 	}
 	
 	/*
@@ -68,6 +69,16 @@ public class Paddle implements Block
 	*/
 	public void run(){
 		yPos += Paddle.SPEED*state;
+		if(yPos<0)
+		{
+			yPos = 0;
+			System.out.println("ceil");
+		}
+		else if(yPos+Paddle.HEIGHT>Runner.YDIMENSION)
+		{
+			yPos = Runner.YDIMENSION-Paddle.HEIGHT;
+			System.out.println("floor");
+		}
 	}
 	
 	/*
@@ -77,7 +88,13 @@ public class Paddle implements Block
 	* Graphics g - the Graphics parameter passed down by the paint() function of the Canvas
 	*/
 	public void draw(Graphics g) {
-		g.setColor(Color.RED);
+		g.setColor(Color.BLUE);
 		g.fillRect(xPos, yPos, Paddle.WIDTH, Paddle.HEIGHT);
+		g.setColor(Color.WHITE);
+		g.drawString(""+score, xPos, yPos+(Paddle.HEIGHT/2));
+	}
+	
+	public void score(){
+		score++;
 	}
 }
