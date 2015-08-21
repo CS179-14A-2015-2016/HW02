@@ -7,8 +7,8 @@
 
 import java.awt.*;
 
-public class GameManager
-{
+public class GameManager extends Canvas
+{ 
 	Block[] blocks;
 	int scoreL, scoreR;
 	
@@ -44,7 +44,7 @@ public class GameManager
 	*	Parameters:
 	*	Graphics g - the Graphics object that handles the drawing of objects in the canvas
 	*/
-	public void draw(Graphics g){
+	public void paint(Graphics g){
 		while(true){
 			for(Block b: blocks)
 				b.draw(g);

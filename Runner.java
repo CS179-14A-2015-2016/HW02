@@ -19,8 +19,4 @@ public class Runner
 	public static void main(String[] args) {
 		
 	}
-	
-	public void paint(Graphics g){
-		gm.draw(g);
-	}
 }
