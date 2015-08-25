@@ -70,15 +70,9 @@ public class Paddle implements Block
 	public void run(){
 		yPos += Paddle.SPEED*state;
 		if(yPos<0)
-		{
 			yPos = 0;
-			System.out.println("ceil");
-		}
 		else if(yPos+Paddle.HEIGHT>Runner.YDIMENSION)
-		{
 			yPos = Runner.YDIMENSION-Paddle.HEIGHT;
-			System.out.println("floor");
-		}
 	}
 	
 	/*
