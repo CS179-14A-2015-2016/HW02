@@ -117,7 +117,7 @@ public class Ball implements Block
 			xVelocity = -1*Ball.SPEED;
 		
 		lastRecord = System.nanoTime();
-		startWait = 500000000l;
+		startWait = 1500000000l;
 	}
 	
 	/*
@@ -145,5 +145,12 @@ public class Ball implements Block
 	public void draw(Graphics g) {
 		g.setColor(Color.ORANGE);
 		g.fillOval(xPos, yPos, Ball.WIDTH, Ball.HEIGHT);
+		g.setColor(Color.WHITE);
+		if(startWait>1000000000)
+			g.drawString("3", xPos + Ball.WIDTH, yPos);
+		else if(startWait>500000000)
+			g.drawString("2", xPos + Ball.WIDTH, yPos);
+		else if(startWait>0)
+			g.drawString("1", xPos + Ball.WIDTH, yPos);
 	}
 }
