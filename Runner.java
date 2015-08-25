@@ -33,7 +33,7 @@ public class Runner extends JFrame
 		while(true)
 		{
 			if(!runner.gm.onProgress){
-				String s = (String) JOptionPane.showInputDialog(null, "Choose winning score", "Winning Score", JOptionPane.PLAIN_MESSAGE, null, winScores, "3");
+				String s = (String) JOptionPane.showInputDialog(null, "Choose winning score", "Winning Score", JOptionPane.PLAIN_MESSAGE, null, winScores, "5");
 				if(s==null)
 					System.exit(0);
 				int winScore = Integer.parseInt(s);
