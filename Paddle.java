@@ -53,6 +53,17 @@ public class Paddle implements Block
 		score = 0;
 	}
 	
+	public void reset(){
+		if(player==0)
+			xPos = LX;
+		else
+			xPos = RX;
+		
+		state = Paddle.STAY;
+		yPos = Y;
+		score = 0;
+	}
+	
 	/*
 	* Sets the state of motion of the Paddle.
 	* 

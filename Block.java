@@ -7,4 +7,5 @@ public interface Block
 {
 	public void run();
 	public void draw(Graphics g);
+	public void reset();
 }

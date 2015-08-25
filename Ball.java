@@ -40,7 +40,6 @@ public class Ball implements Block
 		xVelocity = Ball.SPEED;
 		yVelocity = 0;
 		
-		startWait = 1000000000l;
 		lastRecord = System.nanoTime();
 		touched = false;
 	}
@@ -81,6 +80,10 @@ public class Ball implements Block
 		xVelocity = (int)(Math.cos(angle)*Ball.SPEED);
 		yVelocity = (int)(Math.sin(angle)*Ball.SPEED);
 		return 0;
+	}
+	
+	public void reset(){
+		reset(Paddle.LEFT);
 	}
 	
 	public void reset(int winner)
