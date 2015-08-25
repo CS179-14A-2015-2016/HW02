@@ -29,6 +29,7 @@ public class Runner extends JFrame
 	public static void main(String[] args) throws InterruptedException{
 		Runner runner = new Runner();
 		String[] winScores = new String[] {"3", "5", "10", "20"};
+		long timer = System.nanoTime();
 		while(true)
 		{
 			if(!runner.gm.onProgress){
@@ -39,8 +40,11 @@ public class Runner extends JFrame
 				runner.gm.startGame(winScore);
 			}
 			
-			runner.gm.run();
-			Thread.sleep(30);
+			long tempTimer = System.nanoTime();
+			if(tempTimer-timer>16666667){
+				runner.gm.run();
+				timer = tempTimer;
+			}
 		}
 	}
 }
