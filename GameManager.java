@@ -7,21 +7,31 @@
 
 import java.awt.*;
 import java.awt.event.*;
+import javax.swing.*;
 
 public class GameManager extends Canvas implements KeyListener
 { 
+	int winScore;
 	Block[] blocks;
-	
+	boolean onProgress;
 	
 	public GameManager(){
 		blocks = new Block[3];
 		blocks[0] = new Paddle(Paddle.LEFT);
 		blocks[1] = new Paddle(Paddle.RIGHT);
 		blocks[2] = new Ball((Paddle) blocks[0], (Paddle) blocks[1]);
-        
+		
 		setSize(Runner.XDIMENSION, Runner.YDIMENSION);
         setBackground(Color.BLACK);
 		addKeyListener(this);
+		onProgress = false;
+	}
+	
+	public void startGame(int i){
+		for(Block b: blocks)
+			b.reset();
+		winScore = i;
+		onProgress = true;
 	}
 	
 	/*	
@@ -33,11 +43,21 @@ public class GameManager extends Canvas implements KeyListener
 			{
 				((Paddle)blocks[0]).score();
 				((Ball)blocks[2]).reset(Paddle.LEFT);
+				if(((Paddle)blocks[0]).score==winScore)
+				{
+					JOptionPane.showMessageDialog(null, "PLAYER LEFT wins!");
+					onProgress = false;
+				}
 			}
 			else if (status==-1)
 			{
 				((Paddle)blocks[1]).score();
 				((Ball)blocks[2]).reset(Paddle.RIGHT);
+				if(((Paddle)blocks[1]).score==winScore)
+				{
+					JOptionPane.showMessageDialog(null, "PLAYER RIGHT wins!");
+					onProgress = false;
+				}
 			}
 			
 			// call the run method of each block

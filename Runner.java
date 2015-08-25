@@ -28,8 +28,17 @@ public class Runner extends JFrame
 	
 	public static void main(String[] args) throws InterruptedException{
 		Runner runner = new Runner();
+		String[] winScores = new String[] {"3", "5", "10", "20"};
 		while(true)
 		{
+			if(!runner.gm.onProgress){
+				String s = (String) JOptionPane.showInputDialog(null, "Choose winning score", "Winning Score", JOptionPane.PLAIN_MESSAGE, null, winScores, "3");
+				if(s==null)
+					System.exit(0);
+				int winScore = Integer.parseInt(s);
+				runner.gm.startGame(winScore);
+			}
+			
 			runner.gm.run();
 			Thread.sleep(30);
 		}
