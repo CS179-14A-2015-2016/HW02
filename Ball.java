@@ -58,13 +58,33 @@ public class Ball implements Block
 		// Collission check with paddles
 		if(!touched && xPos<=leftPaddle.xPos+Paddle.WIDTH && xPos+Ball.WIDTH>=leftPaddle.xPos && yPos+Ball.HEIGHT>=leftPaddle.yPos && yPos<=leftPaddle.yPos+Paddle.HEIGHT) // left
 		{
-			angle = (Math.random()*Math.PI/2) - (Math.PI/4);
 			touched = true;
+			switch(leftPaddle.state){
+				case Paddle.CLIMB:
+					angle =  (Math.random()*Math.PI/4) - (Math.PI/2);
+					break;
+				case Paddle.STAY:
+					angle = (Math.random()*Math.PI/2) - (Math.PI/4);
+					break;
+				case Paddle.FALL:
+					angle =(Math.random()*Math.PI/4) + (Math.PI/4);
+					break;
+			}
 		}
 		else if(!touched && xPos+Ball.WIDTH>=rightPaddle.xPos  && xPos+Ball.WIDTH<=rightPaddle.xPos+Paddle.WIDTH && yPos+Ball.HEIGHT>=rightPaddle.yPos && yPos<=rightPaddle.yPos+Paddle.HEIGHT)
 		{
-			angle = (Math.random()*Math.PI/2) + (Math.PI*3.0/4);
 			touched = true;
+			switch(rightPaddle.state){
+				case Paddle.CLIMB:
+					angle = (Math.random()*Math.PI/4) + (5*Math.PI/4);
+					break;
+				case Paddle.STAY:
+					angle = (Math.random()*Math.PI/2) + (3*Math.PI/4);
+					break;
+				case Paddle.FALL:
+					angle = (Math.random()*Math.PI/4) + (Math.PI/2);
+					break;
+			}
 		}
 		else
 			touched = false;

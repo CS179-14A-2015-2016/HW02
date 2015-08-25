@@ -30,7 +30,7 @@ public class Paddle implements Block
 	private static final int SPEED = 10;
 	
 	// player tells which side this paddle is; state tells if the paddle is climbing, falling, or staying in place.
-	private int player, state;
+	int player, state;
 	
 	// x-y coordinates of the paddle on the canvas
 	int xPos, yPos;
