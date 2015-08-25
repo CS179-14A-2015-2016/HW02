@@ -146,11 +146,24 @@ public class Ball implements Block
 		g.setColor(Color.ORANGE);
 		g.fillOval(xPos, yPos, Ball.WIDTH, Ball.HEIGHT);
 		g.setColor(Color.WHITE);
+		int xString = 0;
+		if(startWait>0){
+			if(xVelocity>0)
+			{
+				g.drawString("---->", xPos, yPos-20);
+				xString = xPos+Ball.WIDTH + 10;
+			}
+			else
+			{
+				g.drawString("<----", xPos, yPos-20);
+				xString = xPos-20;
+			}
+		}
 		if(startWait>1000000000)
-			g.drawString("3", xPos + Ball.WIDTH, yPos);
+			g.drawString("3", xString, yPos+15);
 		else if(startWait>500000000)
-			g.drawString("2", xPos + Ball.WIDTH, yPos);
+			g.drawString("2", xString, yPos+15);
 		else if(startWait>0)
-			g.drawString("1", xPos + Ball.WIDTH, yPos);
+			g.drawString("1", xString, yPos+15);
 	}
 }
