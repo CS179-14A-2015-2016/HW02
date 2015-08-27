@@ -1,0 +1,167 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>Pong</title>
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+		<script>
+			$(document).ready(function() {
+				var canvas = document.getElementById("pongcanvas");
+				var rightKeyDown = false;
+				var leftKeyDown = false;
+
+				function Ball(xcoor, ycoor) {
+					this.xcoor = xcoor;
+					this.ycoor = ycoor;
+					this.xspeed = 0;
+					this.yspeed = 0;
+					this.width = 15;
+					this.height = 15;
+				}
+
+				Ball.prototype.create = function(i) {
+					i.fillRect(this.xcoor, this.ycoor, this.width, this.height);
+				};
+
+				Ball.prototype.update = function() {
+					this.xcoor += this.xspeed;
+					this.ycoor += this.yspeed;
+				};
+
+				function Paddle(xcoor, ycoor) {
+					this.xcoor = xcoor;
+					this.ycoor = ycoor;
+					this.width = 96;
+					this.height = 3;
+					this.score = 0;
+				}
+
+				Paddle.prototype.create = function(i) {
+					i.fillRect(this.xcoor, this.ycoor, this.width, this.height);
+				};
+
+				Paddle.prototype.update = function(i) {
+					if (i.xcoor < 48) {
+						this.xcoor = this.xcoor;
+					}
+					else if (i.xcoor > canvas.width - 48) {
+						this.xcoor = this.xcoor;
+					}
+					else if (i.xcoor > 100 || i.xcoor < canvas.width -100) {
+						this.xcoor = i.xcoor - 48;
+					}
+				};
+
+				function keyDownPress(e) {
+					if (e.keyCode == 65) {
+						leftKeyDown = true;
+					}
+					else if (e.keyCode == 68) {
+						rightKeyDown = true;
+					}
+				}
+
+				function keyUpPress(e) {
+					if (e.keyCode == 65) {
+						leftKeyDown = false;
+					}
+					else if (e.keyCode == 68) {
+						rightKeyDown = false;
+					}
+				}
+
+				$(document).keydown(keyDownPress);
+				$(document).keyup(keyUpPress);
+
+				function Initialize() {					
+					this.width = canvas.width;
+					this.height = canvas.height;
+					this.context = canvas.getContext("2d");
+					this.context.fillStyle = "white";
+					rightKeyDown = false;
+					leftKeyDown = false;
+
+					this.AI = new Paddle(278, 5);
+				    this.player = new Paddle(278, this.height - 15);
+
+				    this.ball = new Ball(315, 235);
+				    var randX, randY;
+				    randX = Math.random();
+				    randY = Math.random();
+				    if (randX > 0.5) {
+						this.ball.xspeed = 2;
+				    }
+				    else {
+				    	this.ball.xspeed = -2;
+				    }
+				    
+				    if (randY >0.5) {
+				    	this.ball.yspeed = 2;
+				    }
+				    else {
+				    	this.ball.yspeed = -2;
+				    }
+				}
+
+				Initialize.prototype.create = function() {
+				    this.context.clearRect(0, 0, this.width, this.height);
+
+				    this.AI.create(this.context);
+				    this.player.create(this.context);
+
+				    this.ball.create(this.context);
+				};
+
+				Initialize.prototype.update = function() {
+					this.ball.update();
+					this.AI.update(this.ball);
+
+					if (this.ball.xcoor + 15 >= this.width || this.ball.xcoor <= 0 || (this.ball.ycoor == this.AI.ycoor && this.ball.xcoor >= this.AI.xcoor && this.ball.xcoor <= this.AI.xcoor + this.AI.width) || (this.ball.ycoor + 10 == this.player.ycoor && this.ball.xcoor >= this.player.xcoor && this.ball.xcoor <= this.player.xcoor + this.player.width)){
+						if ((this.ball.ycoor == this.AI.ycoor && this.ball.xcoor >= this.AI.xcoor && this.ball.xcoor <= this.AI.xcoor + this.AI.width) || (this.ball.ycoor + 10== this.player.ycoor && this.ball.xcoor >= this.player.xcoor && this.ball.xcoor <= this.player.xcoor + this.player.width)) {
+							this.ball.yspeed = -this.ball.yspeed;
+						}
+						else if (this.ball.xcoor + 15 == this.width || this.ball.xcoor <= 0) {
+							this.ball.xspeed = -this.ball.xspeed;
+						}
+					}
+					else if (this.ball.ycoor + 15 >= this.height) {
+						alert("You lost :(");
+						pong = new Initialize();
+					}
+					else if (this.ball.ycoor <= 0) {
+						alert("You won :)");
+						pong = new Initialize();
+					}
+					
+					if (leftKeyDown) {
+						if (this.player.xcoor >= 0) {
+							this.player.xcoor -= 15;
+						}				    	
+				    }
+				    else if (rightKeyDown) {
+				    	if (this.player.xcoor <= this.width - this.player.width) {
+				    		this.player.xcoor += 15;
+				    	}
+				    }
+				};
+
+				var pong = new Initialize();
+
+				function RunProg() {
+				    pong.create();
+				    pong.update();
+				    setTimeout(RunProg, 15);
+				}
+
+				RunProg();
+			});
+		</script>
+	</head>
+	<body>
+		<center><canvas id = "pongcanvas" width = "640" height = "480" style = "background-color: black"></canvas></center>
+	</body>
+</html>
+
+<!-- Sources:
+http://blog.mailson.org/2013/02/simple-pong-game-using-html5-and-canvas/
+https://code.google.com/p/pong-canvas/
+http://keycode.info/ -->
